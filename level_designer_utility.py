@@ -112,19 +112,23 @@ class creative_section(pygame.Surface):
         self.dict_buffer = None
         self.sprite_keys = None
         self.cached_sprites = None
-    
+
     def cache_sprites(self):
         for sprite in self.sprite_keys[::-1]:
             if self.cached_sprites.get(sprite): break
             else: self.cached_sprites[sprite] = pygame.transform.scale(pygame.image.load(f'{self.sprite_path}//{sprite}').convert_alpha(),self.sprite_size)
 
-    def add_to_map(self,sprite_key,pos_key):
+    def add_to_map(self,sprite_key,pos):
+        pos_key = pos-self.shift_offset
+        pos_key = pos_key[0]//self.sprite_size[0],pos_key[1]//self.sprite_size[1]
         if self.dict_buffer.get(pos_key[1]) == None:
             self.dict_buffer[pos_key[1]] = {pos_key[0]:sprite_key}
         else:
             self.dict_buffer[pos_key[1]][pos_key[0]] = sprite_key
 
-    def remove_from_map(self,pos_key):
+    def remove_from_map(self,pos):
+        pos_key = pos-self.shift_offset
+        pos_key = pos_key[0]//self.sprite_size[0],pos_key[1]//self.sprite_size[1]
         if row:=self.dict_buffer.get(pos_key[1]):
             if row.get(pos_key[0]): del self.dict_buffer[pos_key[1]][pos_key[0]]
 

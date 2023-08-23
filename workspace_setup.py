@@ -23,13 +23,13 @@ class workspace():
 
     def setup_workspace(self):
         
-        self.working_dir = askdirectory(mustexist=True,title="setup workspace directory",)
+        self.working_dir = askdirectory(title="setup workspace directory",)
         if self.working_dir:
             self.cached_sprites.clear()
             self.json_template['map'].clear()
             self.json_template['sprite_keys'].clear()
             self.sprite_dir_path = path.join(self.working_dir,self.sprite_dir)
-            if not path.exists(self.sprite_dir): mkdir(self.sprite_dir_path)
+            if not path.exists(self.sprite_dir_path): mkdir(self.sprite_dir_path)
             else:
                 self.load_sprite_dir()
 
@@ -59,7 +59,7 @@ class workspace():
     def load_sprite_dir(self):
         if not self.working_dir: return False
         for sprite in listdir(self.sprite_dir_path):
-            if path.isfile(path.join(self.sprite_dir,sprite)) and not self.cached_sprites.get(sprite):
+            if path.isfile(path.join(self.sprite_dir_path,sprite)) and not self.cached_sprites.get(sprite):
                 self.json_template['sprite_keys'].append(sprite)
 
                 self.is_updated = True
@@ -75,8 +75,8 @@ class workspace():
     
     def vailidate_resources(self,resource_arr):
         for resource in resource_arr:
-            if not path.exists(path.join(self.sprite_dir,resource)):
-                showinfo(message=f"Resource not found at :\n /{self.sprite_dir}")
+            if not path.exists(path.join(self.sprite_dir_path,resource)):
+                showinfo(message=f"Resource not found at :\n /{self.sprite_dir_path}")
                 return False
         return True
 

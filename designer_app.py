@@ -58,10 +58,10 @@ class Designer_App(pygame.Surface):
     def bind_values(self):
         self.tool_screen.navigation_section.sprites = self.workspace.json_template['sprite_keys']
         self.creative_screen.dict_buffer = self.workspace.json_template['map']
-        self.creative_screen.sprite_path = self.workspace.sprite_dir
+        self.creative_screen.sprite_path = self.workspace.sprite_dir_path
         self.creative_screen.cached_sprites = self.workspace.cached_sprites
         self.creative_screen.sprite_keys = self.workspace.json_template['sprite_keys']
-        self.creative_screen.sprite_size = self.workspace.sprite_size = self.sprite_size
+        self.sprite_size = self.creative_screen.sprite_size = self.workspace.sprite_size
         self.tool_screen.preview_section.set_preview_image(None)
         self.start = 3
 
@@ -73,15 +73,16 @@ class Designer_App(pygame.Surface):
             match self.key_down[0].unicode:
                 case 'c': self.creative_screen.user_mode = 1
                 case 'v': self.creative_screen.user_mode = 0
+                case 's': print(self.creative_screen.dict_buffer)
 
         if self.creative_screen.rect.collidepoint(self.mouse_pos) or self.start:
             self.creative_screen.draw()
 
             if self.creative_screen.user_mode:
                 if self.mouse_pressed[0] and self.selected_sprite:
-                    self.creative_screen.add_to_map(self.selected_sprite, self.abs_div_tuple(self.mouse_pos,self.sprite_size))
+                    self.creative_screen.add_to_map(self.selected_sprite, self.mouse_pos)
                 elif self.mouse_pressed[2]:
-                    self.creative_screen.remove_from_map(self.abs_div_tuple(self.mouse_pos,self.sprite_size))
+                    self.creative_screen.remove_from_map(self.mouse_pos)
                 
             else:
                 if self.mouse_pressed[0]:
